@@ -1,13 +1,19 @@
-import { Room, Star } from '@material-ui/icons'
-import { useState } from 'react'
-import { Marker, Popup } from 'react-map-gl'
-import { format } from 'timeago.js'
+import { useEffect, useState } from 'react'
+import ReactMapGL from 'react-map-gl'
+import axios from 'axios'
+
+import Pin from '../Pin/Pin'
+import NewPlace from '../NewPlace/NewPlace'
+import UserAccess from '../UserAccess/UserAccess'
+
 import './Place.css'
 
 const Place = () => {
+	const storage = window.localStorage
+
+	const [currentUser, setCurrentUser] = useState(storage.getItem('user'))
 	const [pins, setPins] = useState([])
-	const [currentUser, setCurrentUser] = useState(null)
-	const [currentPlaceId, setCurrentPlaceId] = useState(null)
+	const [newPlace, setNewPlace] = useState(null)
 
 	const [viewport, setViewport] = useState({
 		width: '100vw',
@@ -17,69 +23,57 @@ const Place = () => {
 		zoom: 4,
 	})
 
-	// Click on marker to view informatoin pop-up
-	const handleMarkerClick = (id, lat, long) => {
-		setCurrentPlaceId(id)
-		setViewport({ ...viewport, latitude: lat, longitude: long, zoom: 5 })
-	}
+	useEffect(() => {
+		const getPins = async () => {
+			try {
+				const res = await axios.get('/pins')
+				setPins(res.data)
+			} catch (error) {
+				console.log(error)
+			}
+		}
+		getPins()
+	}, [])
 
-	// Close place info popup
-	const handlePopupClose = () => {
-		setCurrentPlaceId(null)
-		setViewport({ ...viewport, zoom: 4 })
+	// Double click on map to add that place
+	const handleAddClick = (e) => {
+		const [long, lat] = e.lngLat
+		setNewPlace({
+			lat,
+			long,
+		})
 	}
 
 	return (
-		<div>
-			{pins.map((p) => (
-				<>
-					<Marker
-						latitude={p.lat}
-						longitude={p.long}
-						offsetLeft={-viewport.zoom * 3.5}
-						offsetTop={-viewport.zoom * 7}>
-						<Room
-							style={{
-								fontSize: viewport.zoom * 7,
-								color: p.username === currentUser ? 'tomato' : 'slateblue',
-								cursor: 'pointer',
-							}}
-							onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
-						/>
-					</Marker>
+		<ReactMapGL
+			{...viewport}
+			mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
+			onViewportChange={(nextViewport) => setViewport(nextViewport)}
+			mapStyle='mapbox://styles/aspirine-mapbox/ckrgownyt4wzx18qib1ac0e4g'
+			onDblClick={handleAddClick}
+			transitionDuration='500'>
+			{/* Show all pins */}
+			<Pin
+				currentUser={currentUser}
+				pins={pins}
+				viewport={viewport}
+				setViewport={setViewport}
+			/>
 
-					{p._id === currentPlaceId && (
-						<Popup
-							latitude={p.lat}
-							longitude={p.long}
-							closeButton={true}
-							closeOnClick={false}
-							onClose={handlePopupClose}
-							anchor='left'>
-							<div className='card'>
-								<label>Place</label>
-								<h4 className='place'>{p.title}</h4>
+			{/* Add new pin by double click */}
+			<NewPlace
+				currentUser={currentUser}
+				newPlace={newPlace}
+				setNewPlace={setNewPlace}
+				viewport={viewport}
+				setViewport={setViewport}
+				pins={pins}
+				setPins={setPins}
+			/>
 
-								<label>Review</label>
-								<p className='desc'>{p.desc}</p>
-
-								<label>Rating</label>
-								<div className='stars'>
-									{Array(p.rating).fill(<Star className='star' />)}
-									&nbsp; ({p.rating})
-								</div>
-
-								<label>Information</label>
-								<span className='username'>
-									Created by <b>{p.username}</b>{' '}
-								</span>
-								<span className='date'>{format(p.createdAt)}</span>
-							</div>
-						</Popup>
-					)}
-				</>
-			))}
-		</div>
+			{/* User Access */}
+			<UserAccess currentUser={currentUser} setCurrentUser={setCurrentUser} />
+		</ReactMapGL>
 	)
 }
 

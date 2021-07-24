@@ -34,7 +34,7 @@ const Register = ({ setShowLogIn, storage, setCurrentUser }) => {
 
 	return (
 		<div className='loginContainer'>
-			<div className='logo'>
+			<div className='loginLogo'>
 				<Room /> Pinned Places
 			</div>
 

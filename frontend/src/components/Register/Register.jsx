@@ -4,6 +4,10 @@ import { useRef, useState } from 'react'
 import './Register.css'
 
 const Register = ({ setShowRegister }) => {
+	let errPrint
+
+	// const storage = window.localStorage
+
 	const [success, setSuccess] = useState(false)
 	const [error, setError] = useState(false)
 
@@ -22,11 +26,23 @@ const Register = ({ setShowRegister }) => {
 
 		try {
 			await axios.post('/users/register', newUser)
+
 			setError(false)
 			setSuccess(true)
+			setTimeout(() => {
+				setShowRegister(false)
+				setSuccess(false)
+			}, 3000)
 		} catch (error) {
+			errPrint = error.message
 			console.log(error)
 			setError(true)
+
+			setTimeout(() => {
+				setShowRegister(false)
+				setSuccess(false)
+				setError(false)
+			}, 3000)
 		}
 	}
 
@@ -48,7 +64,7 @@ const Register = ({ setShowRegister }) => {
 					</span>
 				)}
 
-				{error && <span className='failure'>Something Went Wrong!</span>}
+				{error && <span className='failure'>{errPrint}</span>}
 			</form>
 			<Close className='cancelBtn' onClick={() => setShowRegister(false)} />
 		</div>

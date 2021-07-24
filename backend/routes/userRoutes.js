@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
 		const savedUser = await newUser.save()
 		res.status(200).json(savedUser._id)
 	} catch (error) {
-		res.status(500).json(error)
+		res.status(500).json({ message: 'User Already Exists! Try Logging In!' })
 	}
 })
 

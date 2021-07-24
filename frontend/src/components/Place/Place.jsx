@@ -20,7 +20,7 @@ const Place = () => {
 		height: '100vh',
 		latitude: 40.866667,
 		longitude: 34.566667,
-		zoom: 2,
+		zoom: 4,
 	})
 
 	useEffect(() => {

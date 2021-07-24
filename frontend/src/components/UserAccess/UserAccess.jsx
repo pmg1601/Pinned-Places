@@ -30,9 +30,12 @@ const UserAccess = ({ currentUser, setCurrentUser }) => {
 	return (
 		<div>
 			{currentUser ? (
-				<button className='button logout' onClick={handleLogout}>
-					Log Out
-				</button>
+				<div className='userInfo'>
+					<button className='button logout' onClick={handleLogout}>
+						Log Out
+					</button>
+					<span className='user'>{currentUser}</span>
+				</div>
 			) : (
 				<div className='buttons'>
 					<button className='button login' onClick={clickedLogin}>

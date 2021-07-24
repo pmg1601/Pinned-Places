@@ -1,1 +1,15 @@
+.instruction {
+	backdrop-filter: blur(10px);
+	display: inline-block;
+	padding: 10px;
+	border-radius: 10px;
+}
 
+ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+ul > li {
+	font-size: 15px;
+}

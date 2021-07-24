@@ -17,6 +17,16 @@ const UserAccess = ({ currentUser, setCurrentUser }) => {
 		setCurrentUser(null)
 	}
 
+	const clickedRegister = () => {
+		setShowRegister(true)
+		setShowLogIn(false)
+	}
+
+	const clickedLogin = () => {
+		setShowRegister(false)
+		setShowLogIn(true)
+	}
+
 	return (
 		<div>
 			{currentUser ? (
@@ -25,13 +35,11 @@ const UserAccess = ({ currentUser, setCurrentUser }) => {
 				</button>
 			) : (
 				<div className='buttons'>
-					<button className='button login' onClick={() => setShowLogIn(true)}>
+					<button className='button login' onClick={clickedLogin}>
 						Log In
 					</button>
 
-					<button
-						className='button register'
-						onClick={() => setShowRegister(true)}>
+					<button className='button register' onClick={clickedRegister}>
 						Register
 					</button>
 				</div>

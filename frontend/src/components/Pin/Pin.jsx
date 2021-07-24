@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Room, Star } from '@material-ui/icons'
 import { Marker, Popup } from 'react-map-gl'
 
+import './Pin.css'
+
 const Pin = ({ currentUser, pins, viewport, setViewport }) => {
 	const [currentPlaceId, setCurrentPlaceId] = useState(null)
 

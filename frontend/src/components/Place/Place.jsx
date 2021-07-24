@@ -18,9 +18,9 @@ const Place = () => {
 	const [viewport, setViewport] = useState({
 		width: '100vw',
 		height: '100vh',
-		latitude: 47,
-		longitude: 17,
-		zoom: 4,
+		latitude: 40.866667,
+		longitude: 34.566667,
+		zoom: 2,
 	})
 
 	useEffect(() => {
@@ -52,6 +52,28 @@ const Place = () => {
 			mapStyle='mapbox://styles/aspirine-mapbox/ckrgownyt4wzx18qib1ac0e4g'
 			onDblClick={handleAddClick}
 			transitionDuration='500'>
+			{/* Instructions */}
+			<div className='instruction'>
+				<ul>
+					<li>
+						- Click on <b>marker</b> to view place.
+					</li>
+					<li>
+						- <b>Double click</b> on map to add your place.
+					</li>
+					<li>
+						-{' '}
+						<span style={{ color: 'tomato', fontWeight: 'bold' }}>Orange</span>{' '}
+						markers represent your places.
+					</li>
+					<li>
+						-{' '}
+						<span style={{ color: 'slateblue', fontWeight: 'bold' }}>Blue</span>{' '}
+						markers represent others places.
+					</li>
+				</ul>
+			</div>
+
 			{/* Show all pins */}
 			<Pin
 				currentUser={currentUser}
